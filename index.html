@@ -3,24 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Feed</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        video {
-            width: 80%;
-            border: 2px solid #333;
-        }
-    </style>
+    <title>WebRTC Stream</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <video id="video" autoplay playsinline></video>
+    <div class="container">
+        <h1>Live Camera and Microphone Feed</h1>
+        <video autoplay playsinline></video>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
