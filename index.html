@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Feed</title>
+    <title>Video Stream</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Live Video Feed</h1>
-        <video id="video" autoplay></video>
-        <button id="startButton">Start Video</button>
-        <p id="status"></p>
-    </div>
+    <h1>Video Stream</h1>
+    <button id="start-video">Start Video</button>
+    <video id="video" autoplay></video>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

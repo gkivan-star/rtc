@@ -1,0 +1,13 @@
+/* style.css */
+
+body {
+    background: linear-gradient(to right, #ffffff, #ffcccc);
+    text-align: center;
+    padding: 20px;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    border: 2px solid #000;
+}
