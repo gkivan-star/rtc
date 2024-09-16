@@ -3,18 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebRTC Live Feed</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>WebRTC to Node.js Server</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        video {
+            width: 80%;
+            border: 2px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>WebRTC Live Feed</h1>
-        <div class="video-container">
-            <video id="localVideo" autoplay muted playsinline></video>
-            <video id="remoteVideo" autoplay playsinline></video>
-        </div>
-    </div>
+    <video id="localVideo" autoplay muted></video>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
+    <script>
+        const video = document.getElementById('localVideo');
+        const socket = io(); // Connect to server
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(stream => {
+                video.srcObject = stream;
+
+                // Capture video frames and send to server
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                function sendFrame() {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(blob => {
+                        socket.emit('video_frame', blob);
+                    }, 'image/jpeg');
+                }
+
+                setInterval(sendFrame, 1000); // Adjust frame rate as needed
+            })
+            .catch(error => console.error('Error accessing media devices.', error));
+    </script>
 </body>
 </html>
