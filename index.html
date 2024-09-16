@@ -1,59 +1,20 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebRTC Stream</title>
+    <title>WebRTC Live Feed</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Live Camera and Microphone Feed</h1>
-        <video autoplay playsinline></video>
+        <h1>WebRTC Live Feed</h1>
+        <div class="video-container">
+            <video id="localVideo" autoplay muted playsinline></video>
+            <video id="remoteVideo" autoplay playsinline></video>
+        </div>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Feed</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        video {
-            width: 80%;
-            border: 2px solid #333;
-        }
-    </style>
-</head>
-<body>
-    <video id="video" autoplay playsinline></video>
-    <script>
-        const video = document.getElementById('video');
-
-        async function startStream() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                video.srcObject = stream;
-                // Optional: send stream to server via WebSocket or other methods
-            } catch (err) {
-                console.error('Error accessing media devices.', err);
-            }
-        }
-
-        startStream();
-    </script>
-</body>
-</html>
->>>>>>> 0d0a2348a334077072cba75d8a42a74c0baeebbc

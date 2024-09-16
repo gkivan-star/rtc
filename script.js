@@ -1,57 +1,52 @@
-<<<<<<< HEAD
-document.addEventListener("DOMContentLoaded", () => {
-    // Get video and audio from user's device
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-            // Display the live video stream on the webpage
-            const videoElement = document.querySelector('video');
-            videoElement.srcObject = stream;
-            videoElement.play();
+const socket = io('http://localhost:3000');  // Replace with your server's URL
 
-            // Send the stream data to the Flask server via WebRTC or WebSocket
-            // Implement the WebRTC or WebSocket connection here
-            // Example: Send the stream to WebSocket server for further handling
-        })
-        .catch(error => {
-            console.error('Error accessing media devices:', error);
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+
+let localStream;
+let peerConnection;
+
+const configuration = {
+    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+};
+
+// Request access to the user's media devices
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+        
+        socket.emit('ready');
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Handle incoming offer from the server
+socket.on('offer', (offer) => {
+    peerConnection = new RTCPeerConnection(configuration);
+    
+    peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+            socket.emit('ice-candidate', event.candidate);
+        }
+    };
+    
+    peerConnection.ontrack = event => {
+        remoteVideo.srcObject = event.streams[0];
+    };
+    
+    peerConnection.addStream(localStream);
+
+    peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
+        .then(() => peerConnection.createAnswer())
+        .then(answer => peerConnection.setLocalDescription(answer))
+        .then(() => {
+            socket.emit('answer', peerConnection.localDescription);
         });
 });
-=======
-const video = document.getElementById('video');
 
-// Function to start capturing video and audio
-async function startStream() {
-    try {
-        // Access the user's camera and microphone
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        video.srcObject = stream;
-
-        // Set up WebSocket connection to the server
-        const ws = new WebSocket('ws://localhost:5000'); // Change this to your ngrok URL if using ngrok
-
-        // Handle WebSocket messages
-        ws.onopen = () => {
-            console.log('WebSocket connection established.');
-        };
-
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-
-        // Send video and audio data to the server
-        const mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-                ws.send(event.data);
-            }
-        };
-
-        mediaRecorder.start(1000); // Send data every second
-
-    } catch (err) {
-        console.error('Error accessing media devices:', err);
+// Handle incoming ICE candidates
+socket.on('ice-candidate', (candidate) => {
+    if (peerConnection) {
+        peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
     }
-}
-
-startStream();
->>>>>>> 0d0a2348a334077072cba75d8a42a74c0baeebbc
+});
