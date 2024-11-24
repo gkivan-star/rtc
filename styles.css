@@ -1,0 +1,48 @@
+/* General Reset for margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* Header Styling */
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+button {
+    background-color: #007BFF;  /* Blue background color */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;  /* Darker blue when hovered */
+}
+
+/* Styling for Alerts */
+.alert {
+    color: #d9534f;  /* Red color for error */
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: center;
+}
